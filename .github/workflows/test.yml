@@ -1,0 +1,9 @@
+build_docker:
+  runs-on: ubuntu-16.04
+  container:
+    image: ubuntu:focal
+  steps:
+    - uses: ros-tooling/setup-ros@v0.3
+      with:
+        required-ros-distributions: kinetic
+    - run: "source /opt/ros/kinetic/setup.bash && rosnode --help"
