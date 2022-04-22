@@ -1,12 +1,24 @@
+name: Lint ROS1 package
 on:
-  push
+  # Run this action whenever a pull request is made
+  pull_request:
+  push:
+    branches:
+      - master
+
 jobs:
-  build_docker:
-    runs-on: ubuntu-16.04
-    container:
-      image: ubuntu:focal
+  # Note that we pass each job a different name to distinguish each linter job
+  ament_lint_cpp:
+    name: ament_${{ matrix.linter }}
+    runs-on: ubuntu-18.04
+    strategy:
+      fail-fast: false
+      matrix:
+        linter: [cppcheck, cpplint]
     steps:
-      - uses: ros-tooling/setup-ros@v0.3
+      - uses: actions/checkout@v2.3.4
+      - uses: ros-tooling/setup-ros@0.2.2
+      - uses: ros-tooling/action-ros2-lint@0.0.6
         with:
-          required-ros-distributions: kinetic
-      - run: "source /opt/ros/kinetic/setup.bash && rosnode --help"
+          linter: ${{ matrix.linter }}
+          package-name: frei0r_image
