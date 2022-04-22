@@ -14,6 +14,10 @@ jobs:
     strategy:
       fail-fast: false
     steps:
+      - name: install non-ros package
+        run: |
+          ls -l $GITHUB_WORKSPACE
+          sudo apt-get install -y frei0r-plugins-dev
       - uses: ros-tooling/setup-ros@v0.2
         with:
           required-ros-distributions: melodic
